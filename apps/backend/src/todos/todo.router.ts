@@ -1,7 +1,7 @@
 import { Input, Mutation, Query, Router } from 'nestjs-trpc';
 import { TodosService } from './todos.service';
 import { z } from 'zod';
-import { createTodoSchema, todoSchema } from './todos.schema';
+import { CreateTodoInput, createTodoSchema, todoSchema } from './todos.schema';
 
 @Router({
   alias: 'todos',
@@ -20,14 +20,14 @@ export class TodoRouter {
     output: z.array(todoSchema),
   })
   getAllTodos() {
-    return this.todosService.getAllTodos;
+    return this.todosService.getAllTodos();
   }
 
   @Mutation({
     input: createTodoSchema,
     output: todoSchema,
   })
-  createTodo(@Input() todoData: createTodoInput) {
+  createTodo(@Input() todoData: CreateTodoInput) {
     return this.todosService.createTodo(todoData);
   }
 
@@ -37,7 +37,7 @@ export class TodoRouter {
   })
   updateTodo(
     @Input('id') id: string,
-    @Input('data') data: Partial<createTodoInput>,
+    @Input('data') data: Partial<CreateTodoInput>,
   ) {
     return this.todosService.updateTodo(id, data);
   }
